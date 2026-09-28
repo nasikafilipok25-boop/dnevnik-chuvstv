@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <title>Дневник чувств — Екатерина Кузьмина</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#CDEBF2">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Дневник чувств">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,480;0,9..144,560;1,9..144,420;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -199,9 +209,8 @@ textarea, input{font-family:inherit; border:none; outline:none; background:none;
   font-size:16px;
 }
 
-textarea.field{
+.field{
   width:100%;
-  min-height:150px;
   background:var(--cream2);
   border:1.5px solid var(--line);
   border-radius:var(--radius-md);
@@ -209,10 +218,10 @@ textarea.field{
   font-size:16.5px;
   line-height:1.5;
   color:var(--ink);
-  resize:none;
 }
-textarea.field::placeholder{ color: rgba(55,47,38,0.38); }
-textarea.field:focus{ border-color: var(--sage-deep); }
+textarea.field{ min-height:150px; resize:none; }
+.field::placeholder{ color: rgba(55,47,38,0.38); }
+.field:focus{ border-color: var(--sage-deep); }
 
 .hint-box{
   margin-top:14px;
@@ -296,7 +305,7 @@ a, .fake-link{ color:inherit; }
 <script>
 /* ============ DATA ============ */
 const EMOTIONS = {
-  "Радость": ["воодушевление", "лёгкость", "спокойствие", "благодарность"],
+  "Радость": ["воодушевление", "лёгкость", "спокойствие", "благодарность", "гордость", "удовольствие", "удовлетворение", "вдохновение", "интерес", "любопытство", "увлечённость", "облегчение", "нежность", "любовь", "умиление", "восторг", "восхищение", "счастье"],
   "Грусть": ["одиночество", "разочарование", "тоска", "печаль"],
   "Страх": ["тревога", "беспокойство", "неуверенность", "паника", "напряжение"],
   "Злость": ["раздражение", "обида", "возмущение", "гнев", "ярость"],
@@ -315,16 +324,16 @@ const EMOTION_GUIDE = {
 };
 
 const BODY_AREAS = {
-  "голова": { x: 200, y: 46, sensations: ["тяжесть", "пульсация", "напряжение", "туман"] },
-  "горло": { x: 200, y: 92, sensations: ["ком", "сжатие", "напряжение"] },
-  "плечи": { x: 200, y: 122, sensations: ["напряжение", "тяжесть", "зажатость"], wide:true },
-  "грудь": { x: 200, y: 158, sensations: ["тяжесть", "сжатие", "давление", "тепло", "холод"] },
-  "живот": { x: 200, y: 208, sensations: ["напряжение", "ком", "спазм", "тяжесть"] },
-  "руки": { x: 138, y: 220, sensations: ["дрожь", "слабость", "напряжение"] },
-  "ноги": { x: 200, y: 340, sensations: ["слабость", "тяжесть", "дрожь"] },
+  "голова": { x: 200, y: 46, sensations: ["тяжесть", "пульсация", "напряжение", "туман", "лёгкость", "ясность", "желание улыбаться", "ничего особенного"] },
+  "горло": { x: 200, y: 92, sensations: ["ком", "сжатие", "напряжение", "тепло", "лёгкость", "ничего особенного"] },
+  "плечи": { x: 200, y: 122, sensations: ["напряжение", "тяжесть", "зажатость", "лёгкость", "расслабление", "ничего особенного"], wide:true },
+  "грудь": { x: 200, y: 158, sensations: ["тяжесть", "сжатие", "давление", "тепло", "холод", "лёгкость", "расширение", "приятное возбуждение", "спокойствие", "ничего особенного"] },
+  "живот": { x: 200, y: 208, sensations: ["напряжение", "ком", "спазм", "тяжесть", "тепло", "лёгкость", "спокойствие", "ничего особенного"] },
+  "руки": { x: 138, y: 220, sensations: ["дрожь", "слабость", "напряжение", "лёгкость", "энергия", "мягкость", "ничего особенного"] },
+  "ноги": { x: 200, y: 340, sensations: ["слабость", "тяжесть", "дрожь", "лёгкость", "энергия", "ничего особенного"] },
 };
 
-const NEEDS = ["Безопасность","Поддержка","Отдых","Забота","Внимание","Близость","Уважение","Свобода","Принятие","Определённость","Признание","Личное пространство","Помощь","Удовольствие"];
+const NEEDS = ["Безопасность","Поддержка","Отдых","Забота","Внимание","Близость","Уважение","Свобода","Принятие","Определённость","Признание","Личное пространство","Помощь","Удовольствие","Развитие","Творчество","Самореализация","Быть замеченной","Делиться","Гордость за себя"];
 
 const NEED_HINTS = {
   "Безопасность": "Возможно, тебе сейчас важно почувствовать почву под ногами — то, на что можно опереться.",
@@ -341,9 +350,15 @@ const NEED_HINTS = {
   "Личное пространство": "Возможно, сейчас тебе нужно немного дистанции, чтобы прийти в себя.",
   "Помощь": "Похоже, часть ноши сейчас хочется с кем-то разделить.",
   "Удовольствие": "Может быть, тебе важно дать себе что-то простое и приятное — без повода.",
+  "Развитие": "Похоже, тебе сейчас важно двигаться вперёд и чувствовать свой рост.",
+  "Творчество": "Может быть, тебе хочется дать выход тому, что рождается внутри.",
+  "Самореализация": "Возможно, для тебя важно почувствовать, что ты делаешь что-то по-настоящему своё.",
+  "Быть замеченной": "Похоже, тебе важно, чтобы то, что ты делаешь и чувствуешь, кто-то увидел.",
+  "Делиться": "Может быть, тебе хочется, чтобы этим моментом стало можно с кем-то поделиться.",
+  "Гордость за себя": "Возможно, тебе важно на секунду остановиться и признать: это твоя заслуга.",
 };
 
-const ACTIONS = ["Отдохнуть","Поговорить","Попросить о помощи","Сказать «нет»","Записать мысли","Выйти на прогулку","Отключиться от телефона","Позаботиться о себе","Дать себе время","Свой вариант"];
+const ACTIONS = ["Отдохнуть","Поддержать себя","Сохранить это состояние","Побыть в этом моменте","Поделиться радостью","Сделать что-то приятное","Поговорить","Попросить о помощи","Сказать «нет»","Записать мысли","Выйти на прогулку","Отключиться от телефона","Позаботиться о себе","Дать себе время","Свой вариант"];
 
 const RELATION_WORDS = ["муж","жена","парн","партнер","партнёр","отношени","мам","пап","семь","друг","подруг","коллег","начальник","ребен","ребён","дочь","сын"];
 
@@ -364,6 +379,14 @@ function saveCustomNeeds(list){
   localStorage.setItem(CUSTOM_NEEDS_KEY, JSON.stringify(list));
 }
 
+const CUSTOM_EMOTIONS_KEY = "dnevnik_chuvstv_custom_emotions_v1";
+function loadCustomEmotions(){
+  try{ return JSON.parse(localStorage.getItem(CUSTOM_EMOTIONS_KEY)) || []; }catch(e){ return []; }
+}
+function saveCustomEmotions(list){
+  localStorage.setItem(CUSTOM_EMOTIONS_KEY, JSON.stringify(list));
+}
+
 /* ============ STATE ============ */
 let state = {
   screen: "home",       // home | new | result | diary | entryDetail | insights
@@ -371,9 +394,11 @@ let state = {
   draft: emptyDraft(),
   entries: loadEntries(),
   customNeeds: loadCustomNeeds(),
+  customEmotions: loadCustomEmotions(),
   currentEntryId: null,
   confirmDeleteId: null,
   showCustomNeedInput: false,
+  showCustomEmotionInput: false,
   showEmotionGuide: false,
 };
 
@@ -509,9 +534,9 @@ const STEP_TITLES = {
   1: {title:"Что произошло?", sub:"Опиши ситуацию коротко. Только факты, без анализа."},
   2: {title:"Что ты подумала?", sub:"Какая мысль появилась в голове в этот момент?"},
   3: {title:"Что ты почувствовала?", sub:"Выбери одну или несколько эмоций."},
-  4: {title:"Как тело реагирует?", sub:"Где ты сейчас ощущаешь напряжение или дискомфорт?"},
+  4: {title:"Как тело реагирует?", sub:"Обрати внимание, что происходит в теле прямо сейчас — это может быть что угодно."},
   5: {title:"О чём говорит эта эмоция?", sub:"Попробуй понять, что тебе сейчас действительно нужно."},
-  6: {title:"Что ты можешь сделать для себя?", sub:"Не нужно решать всю проблему прямо сейчас. Выбери один маленький шаг."},
+  6: {title:"Что тебе хочется сделать сейчас?", sub:"Это может быть шаг вперёд, а может — просто желание остаться в этом моменте."},
 };
 
 function renderWizard(){
@@ -570,16 +595,31 @@ function stepThought(){
 }
 function stepEmotion(){
   const selectedBases = new Set(state.draft.emotions.map(e=>e.base));
+  const allBases = Object.keys(EMOTIONS).concat(state.customEmotions);
   let html = `<button class="small-link" id="open-emotion-guide-btn" style="display:block; margin-bottom:16px; background:none; border:none;">Не можешь подобрать эмоцию? Посмотри подсказку</button>`;
   html += `<div class="chip-grid">`;
-  Object.keys(EMOTIONS).forEach(base=>{
+  allBases.forEach(base=>{
     const isSel = selectedBases.has(base);
     html += `<button class="chip emotion-base ${isSel?'selected':''}" data-emotion-base="${esc(base)}">${esc(base)}</button>`;
   });
+  html += `<button class="chip" id="add-custom-emotion-btn" style="border-style:dashed;">+ Добавить свой вариант</button>`;
   html += `</div>`;
+
+  if(state.showCustomEmotionInput){
+    html += `
+    <div class="card" style="margin-top:14px; padding:14px;">
+      <input id="custom-emotion-text" type="text" maxlength="40" placeholder="Например: облегчение"
+        style="width:100%; font-size:16px; padding:12px 14px; border:1.5px solid var(--line); border-radius:12px; background:var(--cream2); color:var(--ink); margin-bottom:10px;">
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" id="save-custom-emotion-btn" style="padding:12px;">Сохранить</button>
+        <button class="btn btn-outline" id="cancel-custom-emotion-btn" style="padding:12px;">Отмена</button>
+      </div>
+    </div>`;
+  }
 
   selectedBases.forEach(base=>{
     const subs = EMOTIONS[base];
+    if(!subs) return;
     const chosenSubs = new Set(state.draft.emotions.filter(e=>e.base===base).map(e=>e.sub));
     html += `<div style="margin-top:22px;">
       <div class="section-title" style="margin-top:0;">${esc(base)} — уточни, если хочешь</div>
@@ -972,7 +1012,7 @@ function attachHandlers(){
     el.addEventListener("click", ()=>{
       const target = el.getAttribute("data-nav");
       if(target==="new"){
-        setState({screen:"new", step:1, draft: emptyDraft(), showCustomNeedInput:false, showEmotionGuide:false});
+        setState({screen:"new", step:1, draft: emptyDraft(), showCustomNeedInput:false, showCustomEmotionInput:false, showEmotionGuide:false});
       } else {
         setState({screen: target});
       }
@@ -1118,6 +1158,27 @@ function attachHandlers(){
     setState({showCustomNeedInput:false});
   });
 
+  const addCustomEmotionBtn = document.getElementById("add-custom-emotion-btn");
+  if(addCustomEmotionBtn) addCustomEmotionBtn.addEventListener("click", ()=>{
+    setState({showCustomEmotionInput: true});
+    setTimeout(()=>{ const inp = document.getElementById("custom-emotion-text"); if(inp) inp.focus(); }, 0);
+  });
+  const cancelCustomEmotionBtn = document.getElementById("cancel-custom-emotion-btn");
+  if(cancelCustomEmotionBtn) cancelCustomEmotionBtn.addEventListener("click", ()=> setState({showCustomEmotionInput:false}));
+  const saveCustomEmotionBtn = document.getElementById("save-custom-emotion-btn");
+  if(saveCustomEmotionBtn) saveCustomEmotionBtn.addEventListener("click", ()=>{
+    const inp = document.getElementById("custom-emotion-text");
+    const val = (inp && inp.value || "").trim();
+    if(!val) return;
+    const exists = Object.keys(EMOTIONS).concat(state.customEmotions).some(n => n.toLowerCase() === val.toLowerCase());
+    if(!exists){
+      state.customEmotions.push(val);
+      saveCustomEmotions(state.customEmotions);
+    }
+    if(!state.draft.emotions.some(e=>e.base===val)) state.draft.emotions.push({base: val, sub: null});
+    setState({showCustomEmotionInput:false});
+  });
+
   root.querySelectorAll("[data-action]").forEach(el=>{
     el.addEventListener("click", ()=>{
       const a = el.getAttribute("data-action");
@@ -1163,6 +1224,14 @@ function handleWizardContinue(){
 
 /* ============ INIT ============ */
 render();
+</script>
+
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("service-worker.js").catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
